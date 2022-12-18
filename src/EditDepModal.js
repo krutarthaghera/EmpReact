@@ -22,7 +22,7 @@ export class EditDepModal extends Component{
         })
         .then(res=>res.json())
         .then((result)=>{
-            alert(result);
+            alert("update");
         },
         (error)=>{
             alert('Failed');

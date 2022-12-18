@@ -10,7 +10,6 @@ export class AddDepModal extends Component{
     handleSubmit(event){
         event.preventDefault();
         fetch(process.env.REACT_APP_API+'Department',{
-            
             method:'POST',
             headers:{
                 'Accept':'application/json',

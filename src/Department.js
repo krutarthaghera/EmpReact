@@ -1,105 +1,125 @@
-import React,{Component} from 'react';
-import {Table} from 'react-bootstrap';
+import React, { Component } from "react";
+import { Table } from "react-bootstrap";
+import axios from "axios";
 
-import {Button,ButtonToolbar} from 'react-bootstrap';
-import {AddDepModal} from './AddDepModal';
-import {EditDepModal} from './EditDepModal';
+import { Button, ButtonToolbar } from "react-bootstrap";
+import { AddDepModal } from "./AddDepModal";
+import { EditDepModal } from "./EditDepModal";
 
-export class Department extends Component{
+export class Department extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { deps: [], addModalShow: false, editModalShow: false };
+  }
 
-    constructor(props){
-        super(props);
-        this.state={deps:[], addModalShow:false, editModalShow:false}
-    }
+  refreshList() {
+    fetch("https://localhost:7098/api/department", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }).then((response) => {
+      console.log(JSON.stringify());
+      response.json().then((result) => {
+        console.log(result);
+        this.setState({ deps: result });
+      });
+    });
+  }
 
-    refreshList(){
-        fetch('https://localhost:7098/api/department',{
-        method: 'GET',
-        headers: {
-          'Accept' : 'application/json',
-          'Content-Type' : 'application/json',
-        },
-    }).then((response)=>{
-        console.log(JSON.stringify())
-        response.json().then((result)=>{
-            console.log(result);
-            this.setState({deps:result});
+  componentDidMount() {
+    this.refreshList();
+  }
+
+  componentDidUpdate() {
+    //this.refreshList();
+  }
+
+  async deleteDep(depid) {
+    if (window.confirm("Are you sure?")) {
+      // fetch(process.env.REACT_APP_API+'department/'+depid,{
+      //     method:'DELETE',
+      //     header:{'Accept':'application/json',
+      // 'Content-Type':'application/json'}
+      // })
+
+      await axios
+        .delete(process.env.REACT_APP_API + "department/" + depid)
+        .then((res) => {
+          console.log("res", res);
+          this.refreshList();
         })
-    })
-
+        .catch((err) => console.log("err", err));
     }
+  }
+  render() {
+    const { deps, depid, depname } = this.state;
+    let addModalClose = () => this.setState({ addModalShow: false });
+    let editModalClose = () => this.setState({ editModalShow: false });
+    return (
+      <div>
+        <Table className="mt-4" striped bordered hover size="sm">
+          <thead>
+            <tr>
+              <th>DepartmentId</th>
+              <th>DepartmentName</th>
+              <th>Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            {deps.map((dep) => (
+              <tr key={dep.departmentId}>
+                <td>{dep.departmentId}</td>
+                <td>{dep.departmentName}</td>
+                <td>
+                  <ButtonToolbar>
+                    <Button
+                      className="mr-2"
+                      variant="info"
+                      onClick={() =>
+                        this.setState({
+                          editModalShow: true,
+                          depid: dep.departmentId,
+                          depname: dep.departmentName,
+                        })
+                      }
+                    >
+                      Edit
+                    </Button>
 
-    componentDidMount(){
-        this.refreshList();
-    }
+                    <Button
+                      className="mr-2"
+                      variant="danger"
+                      onClick={() => this.deleteDep(dep.departmentId)}
+                    >
+                      Delete
+                    </Button>
 
-    componentDidUpdate(){
-        //this.refreshList();
-    }
+                    <EditDepModal
+                      show={this.state.editModalShow}
+                      onHide={editModalClose}
+                      depid={depid}
+                      depname={depname}
+                    />
+                  </ButtonToolbar>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
 
-    deleteDep(depid){
-        if(window.confirm('Are you sure?')){
-            fetch(process.env.REACT_APP_API+'department/'+depid,{
-                method:'DELETE',
-                header:{'Accept':'application/json',
-            'Content-Type':'application/json'}
-            })
-        }
-    }
-    render(){
-        const {deps, depid,depname}=this.state;
-        let addModalClose=()=>this.setState({addModalShow:false});
-        let editModalClose=()=>this.setState({editModalShow:false});
-        return(
-            <div >
-                <Table className="mt-4" striped bordered hover size="sm">
-                    <thead>
-                        <tr>
-                            <th>DepartmentId</th>
-                        <th>DepartmentName</th>
-                        <th>Options</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {deps.map(dep=>
-                            <tr key={dep.departmentId}>
-                                <td>{dep.departmentId}</td>
-                                <td>{dep.departmentName}</td>
-                                <td>
-<ButtonToolbar>
-    <Button className="mr-2" variant="info"
-    onClick={()=>this.setState({editModalShow:true,
-        depid:dep.departmentId,depname:dep.departmentName})}>
-            Edit
-        </Button>
+        <ButtonToolbar>
+          <Button
+            variant="primary"
+            onClick={() => this.setState({ addModalShow: true })}
+          >
+            Add Department
+          </Button>
 
-        <Button className="mr-2" variant="danger"
-    onClick={()=>this.deleteDep(dep.departmentId)}>
-            Delete
-        </Button>
-
-        <EditDepModal show={this.state.editModalShow}
-        onHide={editModalClose}
-        depid={depid}
-        depname={depname}/>
-</ButtonToolbar>
-
-                                </td>
-
-                            </tr>)}
-                    </tbody>
-
-                </Table>
-
-                <ButtonToolbar>
-                    <Button variant='primary'
-                    onClick={()=>this.setState({addModalShow:true})}>
-                    Add Department</Button>
-
-                    <AddDepModal show={this.state.addModalShow}
-                    onHide={addModalClose}/>
-                </ButtonToolbar>
-            </div>
-        )
-    }
+          <AddDepModal show={this.state.addModalShow} onHide={addModalClose} />
+        </ButtonToolbar>
+      </div>
+    );
+  }
 }

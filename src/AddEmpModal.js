@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Modal,Button, Row, Col, Form,Image} from 'react-bootstrap';
+import {Modal,Button, Row, Col, Form} from 'react-bootstrap';
 
 export class AddEmpModal extends Component{
     constructor(props){
@@ -8,9 +8,6 @@ export class AddEmpModal extends Component{
         this.handleSubmit=this.handleSubmit.bind(this);
         this.handleFileSelected=this.handleFileSelected.bind(this);
     }
-    photofilename = "anonymous.png";
-    imagesrc = process.env.REACT_APP_PHOTOPATH+this.photofilename;
-
     
 
     componentDidMount()
@@ -19,17 +16,12 @@ export class AddEmpModal extends Component{
             .then(response=>response.json())
             .then(data=>{
                 this.setState({deps:data});
-            });
-    
-            fetch('https://localhost:7098/api/country')
-            .then(response=>response.json())
-            .then(data=>{
-                this.setState({cons:data});});
-    
+            });    
         }
     
 
     handleSubmit(event){
+        console.log("event", event.target);
         event.preventDefault();
         fetch(process.env.REACT_APP_API+'employee',{
             method:'POST',
@@ -38,13 +30,12 @@ export class AddEmpModal extends Component{
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-                employeeName:event.target.employeeName.value,
-                employeeGender:event.target.employeeGender.value,
-                employeeMobile:event.target.employeeMobile.value,
-                employeeDOB:event.target.employeeDOB.value,
-                country:event.target.country.value,
+                employeeName:event.target.EmployeeName.value,
+                employeeGender:event.target.EmployeeGender.value,
+                employeeMobile:event.target.EmployeeMobile.value,
+                employeeDOB:event.target.EmployeeDOB.value,
                 department:event.target.department.value,
-                dateOfJoining:event.target.dateOfJoining.value,
+                dateOfJoining:event.target.DateOfJoining.value,
             })
         })
         .then(res=>res.json())
@@ -79,20 +70,6 @@ export class AddEmpModal extends Component{
             alert('Failed');
         })
         
-    }
-    getdatas()
-    {
-        fetch('https://localhost:7098/api/department')
-        .then(response=>response.json())
-        .then(data=>{
-            this.setState({deps:data});
-        });
-
-        fetch('https://localhost:7098/api/country')
-        .then(response=>response.json())
-        .then(data=>{
-            this.setState({cons:data});});
-
     }
 
     render(){
@@ -145,16 +122,8 @@ centered
                         
                     </Form.Group>
 
-                    <Form.Group controlId="Country">
-                        <Form.Label>Country</Form.Label>
-                        <Form.Control as="select">
-                        {this.getdatas()}
-                        {this.state.cons.map(con=>
-                            <option key={con.countryId}>{con.countryName}</option>)}
-                        </Form.Control>
-                    </Form.Group>
 
-                    <Form.Group controlId="Department">
+                    <Form.Group controlId="department">
                         <Form.Label>Department</Form.Label>
                         <Form.Control as="select">
                         {this.state.deps.map(dep=>
@@ -180,11 +149,6 @@ centered
                         </Button>
                     </Form.Group>
                 </Form>
-            </Col>
-
-            <Col sm={6}>
-                <Image width="200px" height="200px" src={this.imagesrc}/>
-                <input onChange={this.handleFileSelected} type="File"/>
             </Col>
         </Row>
     </Modal.Body>
