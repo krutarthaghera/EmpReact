@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { Country } from "../Country";
 import { Department } from "../Department";
-import { Employee } from "../Employee";
+import Employee from "../Employee";
 import { Home } from "../Home";
 import { Register } from "../Components/Login/Register";
 
