@@ -26,17 +26,20 @@ export class EditEmpModal extends Component {
       });
   }
 
-  //   componentDidUpdate() {
-  //     this.setState((prevState) => ({
-  //       ...prevState,
-  //       employeeId: this.props.emp.employeeId,
-  //       employeeName: this.props.emp.employeeName,
-  //     }));
-  //   }
+    componentDidUpdate() {
+      this.setState((prevState) => ({
+        ...prevState,
+        employeeId: this.props.emp.employeeId,
+        employeeName: this.props.emp.employeeName,
+        
+      }));
+    }
+
+  
 
   handleSubmit(event) {
-    console.log("event", event.target);
     event.preventDefault();
+    console.log(this.props.emp)
     fetch(process.env.REACT_APP_API + "employee", {
       method: "PUT",
       headers: {
@@ -46,11 +49,11 @@ export class EditEmpModal extends Component {
       body: JSON.stringify({
         employeeId: this.props.emp.employeeId,
         employeeName: this.state.employeeName,
-        // employeeGender: event.target.employeeGender.value,
-        // employeeMobile: event.target.employeeMobile.value,
-        // employeeDOB: event.target.employeeDOB.value,
-        // department: event.target.department.value,
-        // dateOfJoining: event.target.dateOfJoining.value,
+        employeeGender: this.state.employeeGender,
+        employeeMobile: this.state.employeeMobile,
+        employeeDOB: this.state.employeeDOB,
+        department: this.state.department,
+        dateOfJoining: this.state.dateOfJoining,
       }),
     })
       .then((res) => res.json())
@@ -66,12 +69,12 @@ export class EditEmpModal extends Component {
 
   handleFileSelected(event) {
     event.preventDefault();
-    this.photofilename = event.target.files[0].name;
+    //this.photofilename = event.target.files[0].name;
     const formData = new FormData();
     formData.append(
       "myFile",
       event.target.files[0],
-      event.target.files[0].name
+      event.target.files[0].name,
     );
 
     fetch(process.env.REACT_APP_API + "Employee/SaveFile", {
@@ -141,10 +144,16 @@ export class EditEmpModal extends Component {
                     <Form.Label>EmployeeGender</Form.Label>
                     <Form.Control
                       type="text"
-                      name="EmployeeGender"
+                      gender="EmployeeGender"
                       required
                       defaultValue={this.props.emp.employeeGender}
                       placeholder="EmployeeGender"
+                      onChange={(e) => {
+                        this.setState((prevState) => ({
+                          ...prevState,
+                          EmployeeGender: e.target.value,
+                        }));
+                      }}
                     />
                   </Form.Group>
 
@@ -152,10 +161,16 @@ export class EditEmpModal extends Component {
                     <Form.Label>EmployeeMobile</Form.Label>
                     <Form.Control
                       type="text"
-                      name="EmployeeMobile"
+                      mobile="EmployeeMobile"
                       required
                       defaultValue={this.props.emp.employeeMobile}
                       placeholder="EmployeeMobile"
+                      onChange={(e) => {
+                        this.setState((prevState) => ({
+                          ...prevState,
+                          EmployeeMobile: e.target.value,
+                        }));
+                      }}
                     />
                   </Form.Group>
 
@@ -163,10 +178,16 @@ export class EditEmpModal extends Component {
                     <Form.Label>EmployeeDOB</Form.Label>
                     <Form.Control
                       type="date"
-                      name="EmployeeDOB"
+                      dob="EmployeeDOB"
                       required
                       placeholder="EmployeeDOB"
                       defaultValue={this.props.emp.employeeDOB}
+                      onChange={(e) => {
+                        this.setState((prevState) => ({
+                          ...prevState,
+                          EmployeeDOB: e.target.value,
+                        }));
+                      }}
                     />
                   </Form.Group>
 
@@ -181,6 +202,13 @@ export class EditEmpModal extends Component {
                           {dep.departmentName}
                         </option>
                       ))}
+                      onChange=
+                      {(e) => {
+                        this.setState((prevState) => ({
+                          ...prevState,
+                          Department: e.target.value,
+                        }));
+                      }}
                     </Form.Control>
                   </Form.Group>
 
@@ -188,10 +216,16 @@ export class EditEmpModal extends Component {
                     <Form.Label>DateOfJoining</Form.Label>
                     <Form.Control
                       type="date"
-                      name="DateOfJoining"
+                      doj="DateOfJoining"
                       required
                       placeholder="DateOfJoining"
                       defaultValue={this.props.emp.dateOfJoining}
+                      onChange={(e) => {
+                        this.setState((prevState) => ({
+                          ...prevState,
+                          DateOfJoining: e.target.value,
+                        }));
+                      }}
                     />
                   </Form.Group>
 

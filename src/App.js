@@ -2,15 +2,19 @@ import React, { useState } from "react";
 import { Navigation } from "./Navigation";
 import Router from "./Routes/Router";
 import Login from "./Components/Login/Login";
+import { Register } from "./Components/Login/Register";
 
 function App() {
   const [isLogin, setIsLogin] = useState(localStorage.getItem("auth"));
+  // const [isReg, setisReg] = useState(false);
+  // const [isLog, setisLog] = useState(false);
 
   return (
     <>
       {!isLogin ? (
         <div className="login">
-          <Login setIsLogin={setIsLogin} />
+          <Login setIsLogin={setIsLogin} isRegister={false} />
+          {/* <Register show={isReg} onHide/> */}
         </div>
       ) : (
         <div>

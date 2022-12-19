@@ -4,7 +4,7 @@ import { Country } from "../Country";
 import { Department } from "../Department";
 import { Employee } from "../Employee";
 import { Home } from "../Home";
-import { Register } from "../Register";
+import { Register } from "../Components/Login/Register";
 
 const Router = () => {
   return (

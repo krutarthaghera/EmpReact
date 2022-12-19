@@ -1,12 +1,16 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { Button } from "react-bootstrap";
+import { useNavigate, Link } from "react-router-dom";
+import { Register } from "./Register.js";
+import { Button, ButtonToolbar } from "react-bootstrap";
 
-const Login = ({ setIsLogin }) => {
+const Login = ({ setIsLogin, isRegister }) => {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [isReg, setisReg] = useState(false);
 
   const login = async () => {
     await axios
@@ -24,10 +28,6 @@ const Login = ({ setIsLogin }) => {
         alert(err);
         setIsLogin(false);
       });
-  };
-
-  const navigateRegister = () => {
-    navigate("/register");
   };
 
   return (
@@ -81,12 +81,20 @@ const Login = ({ setIsLogin }) => {
           >
             Login
           </button>
-          <button
-            className="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
-            onClick={navigateRegister}
-          >
-            Register
-          </button>
+          <ButtonToolbar>
+            <Link to="/register">
+              <Button
+                className="btn btn-primary btn-lg btn-block mb-3 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+                onClick={(e) => {
+                  // console.log("This is running", e);
+                  setisReg(true);
+                }}
+              >
+                Click here to Register
+              </Button>
+            </Link>
+            {isReg ? <Register /> : null}
+          </ButtonToolbar>
         </div>
       </div>
     </section>

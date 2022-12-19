@@ -74,7 +74,7 @@ export class Employee extends Component {
           </thead>
           <tbody>
             {emps.map((emp, index) => (
-              <tr key={index * (Math.random()*1000).toFixed(2)}>
+              <tr key={index * (Math.random() * 1000).toFixed(2)}>
                 <td>{emp.employeeId}</td>
                 <td>{emp.employeeName}</td>
                 <th>{emp.employeeGender}</th>
@@ -92,7 +92,7 @@ export class Employee extends Component {
                           editModalShow: true,
                           emp: emps[index],
                         })
-                      } 
+                      }
                     >
                       Edit
                     </Button>
