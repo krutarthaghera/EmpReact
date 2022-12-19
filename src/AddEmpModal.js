@@ -34,15 +34,18 @@ export class AddEmpModal extends Component {
         department: event.target.department.value,
         dateOfJoining: event.target.DateOfJoining.value,
       }),
-    }).then(
-      (res) => res.json())
-      .then((result)=>{
-          alert(result);
-      },
-      (error) => {
-        alert("Failed");
-      }
-    );
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          alert("new user created");
+          this.props.refresh();
+          this.props.onHide();
+        },
+        (error) => {
+          alert("Failed");
+        }
+      );
   }
 
   handleFileSelected(event) {

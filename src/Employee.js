@@ -32,6 +32,7 @@ const Employee = () => {
       .then(refreshList())
       .catch((err) => alert(err));
   };
+
   return (
     <div>
       <Table className="mt-4" striped bordered hover size="sm">
@@ -82,6 +83,8 @@ const Employee = () => {
                       show={editModalShow}
                       onHide={() => setEditModalShow(false)}
                       emp={editEmp}
+                      setEditEmp={setEditEmp}
+                      refresh={refreshList}
                     />
                   ) : null}
                 </ButtonToolbar>
@@ -96,10 +99,12 @@ const Employee = () => {
           Add Employee
         </Button>
 
-        <AddEmpModal
+      {addModalShow?  <AddEmpModal
           show={addModalShow}
           onHide={() => setAddModalShow(false)}
-        />
+          refresh={refreshList}
+      
+        />: null}
       </ButtonToolbar>
     </div>
   );

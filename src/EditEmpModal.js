@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button, Row, Col, Form, Image } from "react-bootstrap";
 
 const EditEmpModal = (props) => {
-  const { show, onHide, emp } = props;
+  const { show, onHide, emp, setEditEmp, refresh } = props;
 
   const [form, setForm] = useState({
     employeeId: "",
@@ -26,40 +26,40 @@ const EditEmpModal = (props) => {
   }, []);
 
   useEffect(() => {
-    if (emp?.length > 0) {
-      setForm({
-        employeeId: emp.employeeId,
-        employeeName: emp.employeeName,
-        employeeGender: emp.employeeGender,
-        employeeMobile: emp.employeeMobile,
-        employeeDOB: emp.employeeDOB,
-        dateOfJoining: emp.dateOfJoining,
-        department: emp.department,
-        photofilename: emp.photofilename,
-      });
-    }
+    setForm({
+      employeeId: emp.employeeId,
+      employeeName: emp.employeeName,
+      employeeGender: emp.employeeGender,
+      employeeMobile: emp.employeeMobile,
+      employeeDOB: emp.employeeDOB,
+      dateOfJoining: emp.dateOfJoining,
+      department: emp.department,
+      photofilename: emp.photofilename,
+    });
   }, [emp]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(emp);
+    console.log(form);
     axios
       .put(process.env.REACT_APP_API + "employee", {
-        form,
+        ...form,
       })
-      .then((res) => onHide())
+      .then((res) => {
+        onHide();
+        setEditEmp([]);
+        refresh();
+      })
       .catch((err) => alert("Failed", err));
   };
 
   const handleFileSelected = (event) => {
     event.preventDefault();
-    setForm(
-      (form = {
-        ...form,
-        photofilename: event.target.files[0].name,
-      })
-    );
-    setForm;
+    setForm((form) => ({
+      ...form,
+      photofilename: event.target.files[0].name,
+    }));
+
     const formData = new FormData();
     formData.append(
       "myFile",
@@ -84,6 +84,8 @@ const EditEmpModal = (props) => {
         }
       );
   };
+
+  console.log(form);
 
   return (
     <div className="container">
