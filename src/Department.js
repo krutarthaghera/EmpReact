@@ -13,11 +13,12 @@ export class Department extends Component {
   }
 
   refreshList() {
-    fetch("https://localhost:7098/api/department", {
+    fetch(process.env.REACT_APP_API+"department", {
       method: "GET",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
       },
     }).then((response) => {
       console.log(JSON.stringify());
@@ -45,7 +46,11 @@ export class Department extends Component {
       // })
 
       await axios
-        .delete(process.env.REACT_APP_API + "department/" + depid)
+        .delete(process.env.REACT_APP_API + "department/" + depid, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
         .then((res) => {
           console.log("res", res);
           this.refreshList();

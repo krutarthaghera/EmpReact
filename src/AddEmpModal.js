@@ -10,7 +10,11 @@ export class AddEmpModal extends Component {
   }
 
   componentDidMount() {
-    fetch("https://localhost:7098/api/department")
+    fetch(process.env.REACT_APP_API + "department", {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         this.setState({ deps: data });
@@ -25,6 +29,7 @@ export class AddEmpModal extends Component {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
       },
       body: JSON.stringify({
         employeeName: event.target.EmployeeName.value,

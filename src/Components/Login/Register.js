@@ -7,7 +7,7 @@ export function Register(props) {
 
   const registeruser = async () => {
     await axios
-      .post("https://localhost:7098/api/Auth/register", {
+      .post(process.env.REACT_APP_API+"Auth/register", {
         username: username,
         password: password,
       })

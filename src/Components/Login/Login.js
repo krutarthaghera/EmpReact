@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 // import { Button } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { Register } from "./Register.js";
@@ -14,7 +14,7 @@ const Login = ({ setIsLogin, isRegister }) => {
 
   const login = async () => {
     await axios
-      .post("https://localhost:7098/api/Auth/login", {
+      .post(process.env.REACT_APP_API + "Auth/login", {
         username: username,
         password: password,
       })

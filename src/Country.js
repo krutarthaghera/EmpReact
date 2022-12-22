@@ -13,7 +13,7 @@ export class Country extends Component{
     }
 
     refreshList(){
-        fetch('https://localhost:7098/api/country',{
+        fetch(process.env.REACT_APP_API+'country',{
         method: 'GET',
         headers: {
           'Accept' : 'application/json',

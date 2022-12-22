@@ -15,7 +15,11 @@ const Employee = () => {
 
   const refreshList = () => {
     axios
-      .get("https://localhost:7098/api/employee")
+      .get(process.env.REACT_APP_API + "employee", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
       .then((result) => {
         setEmps(result.data);
       })
@@ -28,7 +32,11 @@ const Employee = () => {
 
   const deleteEmp = (empid) => {
     axios
-      .delete("https://localhost:7098/api/employee/" + empid)
+      .delete(process.env.REACT_APP_API + "employee/" + empid, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
       .then(refreshList())
       .catch((err) => alert(err));
   };
@@ -99,12 +107,13 @@ const Employee = () => {
           Add Employee
         </Button>
 
-      {addModalShow?  <AddEmpModal
-          show={addModalShow}
-          onHide={() => setAddModalShow(false)}
-          refresh={refreshList}
-      
-        />: null}
+        {addModalShow ? (
+          <AddEmpModal
+            show={addModalShow}
+            onHide={() => setAddModalShow(false)}
+            refresh={refreshList}
+          />
+        ) : null}
       </ButtonToolbar>
     </div>
   );

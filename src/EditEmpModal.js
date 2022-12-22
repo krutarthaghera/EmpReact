@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Row, Col, Form, Image } from "react-bootstrap";
+import { Modal, Button, Row, Col, Form } from "react-bootstrap";
 
 const EditEmpModal = (props) => {
-  const { show, onHide, emp, setEditEmp, refresh } = props;
+  const { onHide, emp, setEditEmp, refresh } = props;
 
   const [form, setForm] = useState({
     employeeId: "",
@@ -20,7 +20,7 @@ const EditEmpModal = (props) => {
 
   useEffect(() => {
     axios
-      .get("https://localhost:7098/api/department")
+      .get(process.env.REACT_APP_API+"department")
       .then((response) => setDept(response.data))
       .catch((err) => alert(err));
   }, []);
@@ -44,6 +44,7 @@ const EditEmpModal = (props) => {
     axios
       .put(process.env.REACT_APP_API + "employee", {
         ...form,
+        Authorization: "Bearer " + localStorage.getItem("token"),
       })
       .then((res) => {
         onHide();
@@ -70,6 +71,9 @@ const EditEmpModal = (props) => {
     fetch(process.env.REACT_APP_API + "Employee/SaveFile", {
       method: "POST",
       body: formData,
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
     })
       .then((res) => res.json())
       .then(
@@ -231,10 +235,7 @@ const EditEmpModal = (props) => {
               </Form>
             </Col>
 
-            <Col sm={6}>
-              <Image width="200px" height="200px" src={form.photofilename} />
-              <input onChange={handleFileSelected} type="File" />
-            </Col>
+            
           </Row>
         </Modal.Body>
 
